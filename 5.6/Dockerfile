@@ -16,7 +16,12 @@ ENV PHP_VERSION 5.6.14
 COPY docker-php-ext-* /usr/local/bin/
 
 # --enable-mysqlnd is included below because it's harder to compile after the fact the extensions are (since it's a plugin for several extensions, not an extension in itself)
-RUN set -x \
+
+RUN buildDeps=" \
+		$PHP_EXTRA_BUILD_DEPS \
+	" \
+	&& set -x \
+    && apt-get update && apt-get install -y $buildDeps --no-install-recommends && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && curl -SL "http://php.net/get/php-$PHP_VERSION.tar.xz/from/this/mirror" -o php.tar.xz \
 	&& curl -SL "http://php.net/get/php-$PHP_VERSION.tar.xz.asc/from/this/mirror" -o php.tar.xz.asc \
 	&& gpg --verify php.tar.xz.asc \
