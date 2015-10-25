@@ -1,7 +1,102 @@
 # About this Repo
 
-This is the Git repo of the official Docker image for [php](https://registry.hub.docker.com/_/php/). See the Hub page for the full readme on how to use the Docker image and for information regarding contributing and issues.
+This is a fork repo from https://github.com/docker-library/php. 
 
-The full readme is generated over in [docker-library/docs](https://github.com/docker-library/docs), specificially in [docker-library/docs/php](https://github.com/docker-library/docs/tree/master/php).
+The diffrent from the origin one is that :
 
-[![Travis CI](https://img.shields.io/travis/docker-library/php/master.svg)](https://travis-ci.org/docker-library/php/branches)
+* PHP in this docker is compiled with many usefull php-exts for delvelpment. So, don't use it for production.
+* php-fpm.conf : `pm.start_servers = 1`
+
+All Exts
+------------
+
+* apc (only for 5.4)
+* bcmath
+* bz2
+* calendar
+* Core
+* ctype
+* curl
+* date
+* dba
+* dom
+* ereg
+* ev
+* exif
+* fileinfo
+* filter
+* ftp
+* gd
+* gearman
+* gettext
+* hash
+* iconv
+* igbinary
+* imagick
+* imap
+* intl
+* json
+* libxml
+* mbstring
+* mcrypt
+* memcache
+* memcached
+* mongo
+* mysql
+* mysqli
+* mysqlnd
+* openssl
+* pcntl
+* pcre
+* PDO
+* pdo_mysql
+* pdo_pgsql
+* pdo_sqlite
+* pgsql
+* phalcon <https://github.com/phalcon/cphalcon>
+* Phar
+* posix
+* readline
+* recode
+* redis
+* Reflection
+* session
+* shmop
+* SimpleXML
+* soap
+* sockets
+* solr
+* SPL
+* sqlite3
+* standard
+* swoole
+* sysvmsg
+* sysvsem
+* sysvshm
+* tidy
+* tokenizer
+* trace <https://github.com/Qihoo360/phptrace>
+* wddx
+* xhprof <https://github.com/phacility/xhprof>
+* xml
+* xmlreader
+* xmlrpc
+* xmlwriter
+* xsl
+* zip
+* zlib
+* Xdebug
+* Zend OPcache
+
+Pull
+-----
+
+You can directly use my images from docker hub: 
+
+```
+$ docker pull snowair/php-fpm:5.6
+$ docker pull snowair/php-fpm:5.5
+$ docker pull snowair/php-fpm:5.4
+```
+
+
