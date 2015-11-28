@@ -30,12 +30,13 @@ COPY docker-php-ext-* /usr/local/bin/
 
 # --enable-mysqlnd is included below because it's harder to compile after the fact the extensions are (since it's a plugin for several extensions, not an extension in itself)
 
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/src/instantclient_12_1
-RUN cd /usr/src \
-    && curl -L -o instantclient-basic-linux.x64-12.1.0.2.0.zip https://coding.net/u/snowair/p/php-docker/git/raw/snowair/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip \
-    && curl -L -o instantclient-sdk-linux.x64-12.1.0.2.0.zip https://coding.net/u/snowair/p/php-docker/git/raw/snowair/oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
-    && unzip instantclient-basic-linux.x64-12.1.0.2.0.zip && unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip && ln -s $LD_LIBRARY_PATH/libclntsh.so.*.1  $LD_LIBRARY_PATH/libclntsh.so \
-    && rm *.zip
+ENV OCI_INSTANT_PATH /usr/lib/instantclient_12_1
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$OCI_INSTANT_PATH
+RUN cd /usr/lib \
+    && curl -L -o instantclient-basic-linux.x64.zip https://coding.net/u/snowair/p/php-docker/git/raw/snowair/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip \
+    && curl -L -o instantclient-sdk-linux.x64.zip https://coding.net/u/snowair/p/php-docker/git/raw/snowair/oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
+    && unzip instantclient-basic-linux.x64.zip && unzip instantclient-sdk-linux.x64.zip && ln -s $OCI_INSTANT_PATH/libclntsh.so.*.1  $OCI_INSTANT_PATH/libclntsh.so \
+    && rm instantclient*.zip
 
 RUN buildDeps=" \
 		$PHP_EXTRA_BUILD_DEPS \
@@ -60,8 +61,8 @@ RUN buildDeps=" \
 		--with-readline \
 		--with-recode \
 		--with-zlib \
-        --with-oci8=shared,instantclient,$LD_LIBRARY_PATH \
-        --with-pdo-oci=instantclient,$LD_LIBRARY_PATH,12.1.0.2 \
+        --with-oci8=shared,instantclient,$OCI_INSTANT_PATH \
+        --with-pdo-oci=instantclient,$OCI_INSTANT_PATH,12.1.0.2 \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
