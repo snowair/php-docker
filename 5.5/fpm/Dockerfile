@@ -13,7 +13,7 @@ RUN set -xe \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-ENV PHP_VERSION 5.5.30
+ENV PHP_VERSION 5.5.32
 
 COPY docker-php-ext-* /usr/local/bin/
 
