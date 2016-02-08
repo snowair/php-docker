@@ -34,8 +34,8 @@ COPY docker-php-ext-* /usr/local/bin/
 ENV OCI_INSTANT_PATH /usr/lib/instantclient_12_1
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$OCI_INSTANT_PATH
 RUN cd /usr/lib \
-    && curl -L -o instantclient-basic-linux.x64.zip https://coding.net/u/snowair/p/php-docker/git/raw/snowair/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip \
-    && curl -L -o instantclient-sdk-linux.x64.zip https://coding.net/u/snowair/p/php-docker/git/raw/snowair/oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
+    && curl -L -o instantclient-basic-linux.x64.zip https://raw.githubusercontent.com/snowair/php-docker/snowair/oracle/instantclient-basic-linux.x64-12.1.0.2.0.zip \
+    && curl -L -o instantclient-sdk-linux.x64.zip https://raw.githubusercontent.com/snowair/php-docker/snowair/oracle/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
     && unzip instantclient-basic-linux.x64.zip && unzip instantclient-sdk-linux.x64.zip && ln -s $OCI_INSTANT_PATH/libclntsh.so.*.1  $OCI_INSTANT_PATH/libclntsh.so \
     && rm instantclient*.zip
 
