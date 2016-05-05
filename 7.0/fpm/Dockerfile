@@ -13,7 +13,7 @@ RUN set -xe \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-ENV PHP_VERSION 7.0.4
+ENV PHP_VERSION 7.0.5
 COPY docker-php-ext-* /usr/local/bin/
 
 # --enable-mysqlnd is included below because it's harder to compile after the fact the extensions are (since it's a plugin for several extensions, not an extension in itself)
