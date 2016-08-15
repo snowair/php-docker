@@ -70,7 +70,7 @@ RUN buildDeps=" \
 	&& make clean
 RUN curl -L -o phptrace.zip https://github.com/Qihoo360/phptrace/archive/master.zip && unzip phptrace.zip &&  cd phptrace-master/extension && phpize && ./configure && make && make install && cd ../cmdtool && make && cp phptrace /usr/local/bin/  && cd ../.. && rm -fr phptrace* \
     && curl -L -o xhprof.zip https://github.com/phacility/xhprof/archive/master.zip  && unzip xhprof.zip && cd xhprof-master/extension && phpize && ./configure && make && make install && cd - && rm -fr xhprof* \
-    && curl -L -o cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
+    && curl -L -o cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php5/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
     && curl -L -o phpredis.zip https://github.com/phpredis/phpredis/archive/master.zip && unzip phpredis.zip && cd phpredis-master && phpize && ./configure && make && make install && cd - && rm -fr phpredis* 
 
 # oci8和pdo-oci扩展编译为shared扩展, 否则与imap扩展会有冲突

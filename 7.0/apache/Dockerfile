@@ -69,7 +69,8 @@ RUN buildDeps=" \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
 	&& make clean
 
-RUN curl -L -o phpredis.zip https://github.com/phpredis/phpredis/archive/php7.zip && unzip phpredis.zip && cd phpredis-php7 && phpize && ./configure && make && make install && cd - && rm -fr phpredis*
+RUN curl -L -o phpredis.zip https://github.com/phpredis/phpredis/archive/php7.zip && unzip phpredis.zip && cd phpredis-php7 && phpize && ./configure && make && make install && cd - && rm -fr phpredis* \
+    && curl -L -o cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon*
 
 RUN docker-php-ext-configure imap  --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --enable-gd-native-ttf \
