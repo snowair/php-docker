@@ -78,7 +78,7 @@ RUN docker-php-ext-configure imap  --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-install tidy intl wddx xmlrpc  xsl opcache \
        bz2 bcmath calendar dba gd exif ftp gettext imap mbstring mcrypt mysqli pcntl pdo_mysql pdo_pgsql pgsql  sockets shmop  sysvsem soap sysvmsg  sysvshm zip
 RUN pear clear-cache ; pear update-channels; pear upgrade; pecl install  swoole solr mongodb imagick  xdebug ev
-RUN docker-php-ext-enable redis opcache swoole oci8  pdo_oci solr mongodb imagick xdebug ev
+RUN docker-php-ext-enable redis opcache swoole oci8  pdo_oci solr mongodb imagick xdebug ev phalcon
 
 # 以下扩展暂不支持php7
 #RUN pecl install igbinary gearman  memcached
