@@ -13,7 +13,7 @@ RUN set -xe \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-ENV PHP_VERSION 5.6.29
+ENV PHP_VERSION 5.6.30
 COPY docker-php-ext-* /usr/local/bin/
 
 # --enable-mysqlnd is included below because it's harder to compile after the fact the extensions are (since it's a plugin for several extensions, not an extension in itself)
@@ -57,6 +57,10 @@ RUN buildDeps=" \
 RUN curl -L -o phptrace.zip https://github.com/Qihoo360/phptrace/archive/master.zip && unzip phptrace.zip &&  cd phptrace-master/extension && phpize && ./configure && make && make install && cd ../cmdtool && make && cp phptrace /usr/local/bin/  && cd ../.. && rm -fr phptrace* \
     && curl -L -o xhprof.zip https://github.com/phacility/xhprof/archive/master.zip  && unzip xhprof.zip && cd xhprof-master/extension && phpize && ./configure && make && make install && cd - && rm -fr xhprof* \
     && curl -L -o cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php5/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
+    && curl -L -o hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
+    && curl -L -o swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd cd swoole-src-2.0.6 && phpize \
+        && ./configure --enable-sockets --enable-openssl --with-openssl-dir --enable-async-redis --enable-coroutine \
+        && make && make install && cd - && rm -fr swoole* \
     && curl -L -o phpredis.zip https://github.com/phpredis/phpredis/archive/master.zip && unzip phpredis.zip && cd phpredis-master && phpize && ./configure && make && make install && cd - && rm -fr phpredis*
 
 # oci8和pdo-oci扩展编译为shared扩展, 否则与imap扩展会有冲突
@@ -66,7 +70,7 @@ RUN docker-php-ext-configure imap  --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure hash --with-mhash \
     && docker-php-ext-install tidy intl wddx xmlrpc  xsl opcache \
        bz2 bcmath calendar dba gd exif ftp gettext imap mbstring mcrypt mysqli pcntl pdo_mysql pdo_pgsql pgsql  sockets shmop  sysvsem soap sysvmsg  sysvshm zip
-RUN pecl install ev imagick gearman solr mongo mongodb memcache memcached xdebug swoole jsond
+RUN pecl install ev imagick gearman solr mongo mongodb memcache memcached xdebug jsond
 RUN docker-php-ext-enable phalcon redis xhprof solr mongo memcache memcached xdebug swoole opcache ev gearman imagick oci8 trace pdo_oci mongodb jsond
 
 
