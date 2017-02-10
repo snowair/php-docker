@@ -89,6 +89,7 @@ for version in "${versions[@]}"; do
 	#   see the "apiJqExpr" values above for more details
 	eval "possi=( ${possibles[0]} )"
 	fullVersion="${possi[0]}"
+	mainVersion="${fullVersion:0:1}"
 	url="${possi[1]}"
 	ascUrl="${possi[2]}"
 	sha256="${possi[3]}"
@@ -159,6 +160,7 @@ for version in "${versions[@]}"; do
 		set -x
 		sed -ri \
 			-e 's!%%PHP_VERSION%%!'"$fullVersion"'!' \
+			-e 's!%%PHP_MAIN_VERSION%%!'"$mainVersion"'!' \
 			-e 's!%%GPG_KEYS%%!'"$gpgKey"'!' \
 			-e 's!%%PHP_URL%%!'"$url"'!' \
 			-e 's!%%PHP_ASC_URL%%!'"$ascUrl"'!' \
