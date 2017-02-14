@@ -6,26 +6,6 @@
 
 FROM snowair/debian:php-base
 
-# persistent / runtime deps
-ENV PHPIZE_DEPS \
-		autoconf \
-		file \
-		g++ \
-		gcc \
-		libc-dev \
-		make \
-		pkg-config \
-		re2c
-RUN apt-get update && apt-get install -y \
-		$PHPIZE_DEPS \
-		ca-certificates \
-		curl \
-		libedit2 \
-		libsqlite3-0 \
-		libxml2 \
-		xz-utils \
-	--no-install-recommends && rm -r /var/lib/apt/lists/*
-
 ENV PHP_INI_DIR /usr/local/etc/php
 RUN mkdir -p $PHP_INI_DIR/conf.d
 
@@ -113,14 +93,6 @@ ENV PHP_URL="https://secure.php.net/get/php-7.1.1.tar.xz/from/this/mirror" PHP_A
 ENV PHP_SHA256="b3565b0c1441064eba204821608df1ec7367abff881286898d900c2c2a5ffe70" PHP_MD5="65eef256f6e7104a05361939f5e23ada"
 
 RUN set -xe; \
-	\
-	fetchDeps=' \
-		wget \
-	'; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends $fetchDeps; \
-	rm -rf /var/lib/apt/lists/*; \
-	\
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
@@ -141,25 +113,18 @@ RUN set -xe; \
 		done; \
 		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
 		rm -r "$GNUPGHOME"; \
-	fi; \
-	\
-	apt-get purge -y --auto-remove $fetchDeps
+	fi;
 
 COPY docker-php-source /usr/local/bin/
 
-RUN set -xe \
-	&& buildDeps=" \
-		$PHP_EXTRA_BUILD_DEPS \
-        libaio-dev  \
-		libcurl4-openssl-dev \
-		libedit-dev \
-		libsqlite3-dev \
-		libssl-dev \
-		libxml2-dev \
-	" \
-	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -rf /var/lib/apt/lists/* \
-	\
-	&& export CFLAGS="$PHP_CFLAGS" \
+RUN set -xe; \
+	if [ -n "$PHP_EXTRA_BUILD_DEPS" ]; then \
+        buildDeps=" \
+            $PHP_EXTRA_BUILD_DEPS \
+        " \
+        && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+	fi; \
+	export CFLAGS="$PHP_CFLAGS" \
 		CPPFLAGS="$PHP_CPPFLAGS" \
 		LDFLAGS="$PHP_LDFLAGS" \
 	&& docker-php-source extract \
