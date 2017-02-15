@@ -112,9 +112,9 @@ RUN curl -L -o cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.z
 RUN curl -L -o hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* 
 RUN curl -L -o swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
         && ./configure --enable-sockets --enable-openssl --with-openssl-dir --enable-async-redis --enable-coroutine \
-        && make && make install && cd - && rm -fr swoole* \
+        && make && make install && cd - && rm -fr swoole*
 
-RUN docker-php-ext-configure imap --with-imap-ssl --with-kerberos \
+RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --enable-gd-native-ttf \
     && docker-php-ext-configure hash --with-mhash \
     && docker-php-ext-install tidy intl wddx xmlrpc  xsl opcache \
