@@ -117,7 +117,7 @@ RUN docker-php-ext-configure imap  --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --enable-gd-native-ttf \
     && docker-php-ext-configure hash --with-mhash \
     && docker-php-ext-install tidy intl wddx xmlrpc  xsl opcache \
-       bz2 bcmath calendar dba gd exif ftp gettext imap mbstring mcrypt mysqli pcntl pdo_mysql pdo_pgsql pgsql  sockets shmop  sysvsem soap sysvmsg  sysvshm zip
+       bz2 bcmath calendar dba gd exif ftp gettext imap mbstring mcrypt mysqli pcntl pdo_mysql pdo_pgsql pgsql shmop  sysvsem soap sysvmsg  sysvshm zip
 RUN pear clear-cache ; pear update-channels; pear upgrade; pecl install solr mongodb imagick  xdebug ev memcached igbinary redis
 RUN docker-php-ext-enable redis opcache swoole oci8  pdo_oci solr mongodb imagick xdebug ev phalcon memcached igbinary
 
