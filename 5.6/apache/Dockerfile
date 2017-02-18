@@ -116,12 +116,12 @@ RUN set -xe; \
 	if [ -n "$HTTPS_PROXY" ]; then \
         apt_https_config="-o Acquire::https::proxy=$HTTPS_PROXY" ; \
 	fi; \
-#	if [ -n "$PHP_EXTRA_BUILD_DEPS" ]; then \
+ 	if [ -n "$PHP_EXTRA_BUILD_DEPS" ]; then \
         buildDeps=" \
             $PHP_EXTRA_BUILD_DEPS \
         " ; \
         apt-get update $apt_http_config $apt_https_config && apt-get $apt_http_config $apt_https_config install -y $buildDeps --no-install-recommends && rm -rf /var/lib/apt/lists/* ;\
-#	fi; \
+ 	fi; \
 	export CFLAGS="$PHP_CFLAGS" \
 		CPPFLAGS="$PHP_CPPFLAGS" \
 		LDFLAGS="$PHP_LDFLAGS" \
