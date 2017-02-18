@@ -5,12 +5,10 @@ This is a fork repo from https://github.com/docker-library/php.
 The diffrent from the origin one is that :
 
 * PHP in this docker is compiled with many usefull php-exts for delvelpment. So, don't use it for production.
-* php-fpm.conf : `pm.start_servers = 1`
 
 All Exts
 ------------
 
-* apc (only for 5.4)
 * bcmath
 * bz2
 * calendar
@@ -27,7 +25,6 @@ All Exts
 * filter
 * ftp
 * gd
-* gearman
 * gettext
 * hash
 * iconv
@@ -39,10 +36,7 @@ All Exts
 * libxml
 * mbstring
 * mcrypt
-* memcache
 * memcached
-* mongo
-* mysql
 * mysqli
 * mysqlnd
 * openssl
@@ -75,9 +69,7 @@ All Exts
 * sysvshm
 * tidy
 * tokenizer
-* trace <https://github.com/Qihoo360/phptrace>
 * wddx
-* xhprof <https://github.com/phacility/xhprof>
 * xml
 * xmlreader
 * xmlrpc
@@ -95,7 +87,7 @@ You can directly use my images from docker hub:
 
 ```
 $ docker pull snowair/php-fpm:5.6
-$ docker pull snowair/php-fpm:5.5
-$ docker pull snowair/php-fpm:5.4
+$ docker pull snowair/php-fpm:7.0
+$ docker pull snowair/php-fpm:7.1
 ```
 
