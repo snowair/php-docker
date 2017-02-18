@@ -85,6 +85,11 @@ ENV PHP_URL="https://secure.php.net/get/php-7.0.16.tar.xz/from/this/mirror" PHP_
 ENV PHP_SHA256="244ac39bc657448962860aa7a590e4417f68513ad5e86ee2727b1328b0537309" PHP_MD5="6161aba9d24322d889da5d2ff944bddf"
 
 RUN set -xe; \
+    if [ -n "$HTTP_PROXY" ]; then \
+        export http_proxy=$HTTP_PROXY ; \
+        export https_proxy=$HTTP_PROXY ; \
+        export HTTPS_PROXY=$HTTP_PROXY ; \
+	fi; \
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
@@ -99,12 +104,12 @@ RUN set -xe; \
 	\
 	if [ -n "$PHP_ASC_URL" ]; then \
 		wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
-		export GNUPGHOME="$(mktemp -d)"; \
-		for key in $GPG_KEYS; do \
-			gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-		done; \
-		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-		rm -r "$GNUPGHOME"; \
+#   	export GNUPGHOME="$(mktemp -d)"; \
+#   	for key in $GPG_KEYS; do \
+#   		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+#   	done; \
+#   	gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+#   	rm -r "$GNUPGHOME"; \
 	fi;
 
 COPY docker-php-source /usr/local/bin/
@@ -112,9 +117,7 @@ COPY docker-php-source /usr/local/bin/
 RUN set -xe; \
 	if [ -n "$HTTP_PROXY" ]; then \
         apt_http_config="-o Acquire::http::proxy=$HTTP_PROXY" ; \
-	fi; \
-	if [ -n "$HTTPS_PROXY" ]; then \
-        apt_https_config="-o Acquire::https::proxy=$HTTPS_PROXY" ; \
+        apt_https_config="-o Acquire::https::proxy=$HTTP_PROXY" ; \
 	fi; \
  	if [ -n "$PHP_EXTRA_BUILD_DEPS" ]; then \
         buildDeps=" \
@@ -161,9 +164,14 @@ RUN set -xe; \
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
-RUN wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* 
-RUN wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* 
-RUN wget -O swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
+RUN if [ -n "$HTTP_PROXY" ]; then \
+        export http_proxy=$HTTP_PROXY ; \
+        export https_proxy=$HTTP_PROXY ; \
+        export HTTPS_PROXY=$HTTP_PROXY ; \
+	fi; \
+    wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
+    && wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
+    && wget -O swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
         && ./configure --enable-sockets --enable-openssl --with-openssl-dir --enable-async-redis --enable-coroutine \
         && make && make install && cd - && rm -fr swoole*
 
@@ -176,7 +184,11 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
         pear config-set http_proxy $HTTP_PROXY ; \
         pecl config-set http_proxy $HTTP_PROXY ; \
 	fi; \
-    pear clear-cache ; pear update-channels; pear upgrade; pecl install solr mongodb xdebug ev memcached igbinary redis imagick
+# php5
+    if [ 7 -eq 5 ]; then \
+        memcached_version="-2.2.0" ; \
+	fi; \
+    pear clear-cache ; pear update-channels; pear upgrade; pecl install solr mongodb xdebug ev memcached$memcached_version igbinary redis imagick
 RUN docker-php-ext-enable redis opcache swoole oci8  pdo_oci solr mongodb xdebug ev phalcon memcached igbinary imagick
 
 ENTRYPOINT ["docker-php-entrypoint"]
