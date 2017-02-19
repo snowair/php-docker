@@ -126,7 +126,7 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
     if [ 5 -eq 5 ]; then \
         memcached_version="-2.2.0" ; \
 	fi; \
-    modules="memcached redis solr mongodb xdebug ev igbinary imagick" ;\
+    modules="memcached redis solr mongodb xdebug ev igbinary imagick yaf" ;\
     for m in $modules; do \
         if [ "$m" = "memcached" ]; then \
             url=http://pecl.php.net/get/memcached$memcached_version; \
