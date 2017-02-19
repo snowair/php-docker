@@ -142,13 +142,13 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
         export https_proxy=$HTTP_PROXY ; \
         export HTTPS_PROXY=$HTTP_PROXY ; \
 	fi; \
-    wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
-    && wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
-#   && wget -O swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
-#       && ./configure --enable-sockets --enable-openssl --with-openssl-dir --enable-async-redis --enable-coroutine \
-#       && make && make install && cd - && rm -fr swoole* \
-#   && docker-php-ext-enable swoole \
-    && docker-php-ext-enable phalcon
+#   wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
+#   && docker-php-ext-enable phalcon && \
+    wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
+    && wget -O swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
+        && ./configure --enable-sockets --enable-openssl --with-openssl-dir --enable-async-redis --enable-coroutine \
+        && make && make install && cd - && rm -fr swoole* \
+    && docker-php-ext-enable swoole
     
 
 ENTRYPOINT ["docker-php-entrypoint"]
