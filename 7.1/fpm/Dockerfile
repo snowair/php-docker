@@ -138,7 +138,7 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
     if [ 7 -eq 5 ]; then \
         memcached_version="-2.2.0" ; \
 	fi; \
-    modules="redis solr mongodb xdebug ev memcached$memcached_version igbinary imagick" ;\
+    modules="memcached$memcached_version redis solr mongodb xdebug ev igbinary imagick" ;\
     for m in $modules; do \
         url=http://pecl.php.net/get/$m; \
         wget -O $m.tgz $url && tar -xf $m.tgz && cd `ls -d $m*/` && phpize && ./configure  && make && make install && rm -fr $m* && \
