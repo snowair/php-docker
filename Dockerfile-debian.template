@@ -43,16 +43,16 @@ RUN set -xe; \
 	\
 	if [ -n "$PHP_ASC_URL" ]; then \
     	wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
-#       unset HTTP_PROXY ; \
-#       unset http_proxy ; \
-#       unset https_proxy ; \
-#       unset HTTPS_PROXY ; \
-#   	export GNUPGHOME="$(mktemp -d)"; \
-#   	for key in $GPG_KEYS; do \
-#   		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-#   	done; \
-#   	gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-#   	rm -r "$GNUPGHOME"; \
+        unset HTTP_PROXY ; \
+        unset http_proxy ; \
+        unset https_proxy ; \
+        unset HTTPS_PROXY ; \
+    	export GNUPGHOME="$(mktemp -d)"; \
+    	for key in $GPG_KEYS; do \
+    		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+    	done; \
+    	gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+    	rm -r "$GNUPGHOME"; \
 	fi;
 
 COPY docker-php-source /usr/local/bin/
