@@ -133,7 +133,7 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
         else \
             url=http://pecl.php.net/get/$m; \
         fi; \
-        wget -O $m.tgz $url && tar -xf $m.tgz && cd `ls -d $m*/` && phpize && ./configure  && make && make install && rm -fr $m* && \
+        wget -O $m.tgz $url && tar -xf $m.tgz && cd `ls -d $m*/` && phpize && ./configure  && make && make install && cd - && rm -fr $m* && \
         docker-php-ext-enable $m ; \
     done; 
 
