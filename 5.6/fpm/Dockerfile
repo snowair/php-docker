@@ -126,13 +126,16 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
 # php5
     if [ 5 -eq 5 ]; then \
         memcached_version="-2.2.0" ; \
+        yaf_version="-2.3.5" ; \
 	fi; \
     modules="memcached redis solr mongodb xdebug ev igbinary imagick yaf" ;\
     for m in $modules; do \
+        url=http://pecl.php.net/get/$m; \
         if [ "$m" = "memcached" ]; then \
             url=http://pecl.php.net/get/memcached$memcached_version; \
-        else \
-            url=http://pecl.php.net/get/$m; \
+        fi; \
+        if [ "$m" = "yaf" ]; then \
+            url=http://pecl.php.net/get/yaf$yaf_version; \
         fi; \
         wget -O $m.tgz $url && tar -xf $m.tgz && cd `ls -d $m*/` && phpize && ./configure  && make && make install && cd - && rm -fr $m* && \
         docker-php-ext-enable $m ; \
