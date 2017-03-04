@@ -179,18 +179,23 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
         export HTTPS_PROXY=$HTTP_PROXY ; \
 	fi; \
 # php5
+    cwd=`pwd` ; \
+    modules="cassandra msgpack inotify hprose crypto eio memcached redis solr mongodb xdebug ev igbinary imagick yaf" ;\
     if [ 7 -eq 5 ]; then \
         memcached_version="-2.2.0" ; \
+        inotify_version="-0.1.6" ; \
+        modules="$modules libevent memcache apc xhprof trace sphinx"; \
 	fi; \
-    modules="memcached redis solr mongodb xdebug ev igbinary imagick yaf" ;\
     for m in $modules; do \
+        url=http://pecl.php.net/get/$m; \
+        if [ "$m" = "inotify" ]; then \
+            url=http://pecl.php.net/get/inotify$inotify_version; \
+        fi; \
         if [ "$m" = "memcached" ]; then \
             url=http://pecl.php.net/get/memcached$memcached_version; \
-        else \
-            url=http://pecl.php.net/get/$m; \
         fi; \
-        wget -O $m.tgz $url && tar -xf $m.tgz && cd `ls -d $m*/` && phpize && ./configure  && make && make install && cd - && rm -fr $m* && \
-        docker-php-ext-enable $m ; \
+        cd $cwd ; wget -O $m.tgz $url && tar -xf $m.tgz && cd `ls -d $m*/` && phpize && ./configure  && make && make install && docker-php-ext-enable $m ; \
+        cd $cwd ; rm -fr $m* ; \
     done; 
 
 RUN if [ -n "$HTTP_PROXY" ]; then \
@@ -198,8 +203,15 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
         export https_proxy=$HTTP_PROXY ; \
         export HTTPS_PROXY=$HTTP_PROXY ; \
 	fi; \
-    wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon* \
-    && wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
+    if [ 7 -eq 5 ]; then \
+            wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon*  && docker-php-ext-enable phalcon swoole; \
+	fi; \
+    if [ 7 -eq 7 ]; then \
+        if [ 0 -eq 0 ]; then \
+            wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon*  && docker-php-ext-enable phalcon swoole; \
+        fi; \
+	fi; \
+    wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
     && wget -O swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
         && ./configure --enable-sockets --enable-openssl --with-openssl-dir --enable-async-redis --enable-coroutine \
         && make && make install && cd - && rm -fr swoole* \
