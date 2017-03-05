@@ -124,14 +124,18 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
 	fi; \
 # php5
     cwd=`pwd` ; \
-    modules="cassandra msgpack inotify hprose crypto eio memcached redis solr mongodb xdebug ev igbinary imagick yaf" ;\
+    modules="event msgpack inotify hprose crypto eio memcached redis solr mongodb xdebug ev igbinary imagick yaf" ;\
     if [ 7 -eq 5 ]; then \
         memcached_version="-2.2.0" ; \
+        msgpack_version="-0.5.7" ; \
         inotify_version="-0.1.6" ; \
         modules="$modules libevent memcache apc xhprof trace sphinx"; \
 	fi; \
     for m in $modules; do \
         url=http://pecl.php.net/get/$m; \
+        if [ "$m" = "msgpack" ]; then \
+            url=http://pecl.php.net/get/msgpack$msgpack_version; \
+        fi; \
         if [ "$m" = "inotify" ]; then \
             url=http://pecl.php.net/get/inotify$inotify_version; \
         fi; \
