@@ -211,9 +211,7 @@ RUN if [ -n "$HTTP_PROXY" ]; then \
             wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon*  && docker-php-ext-enable phalcon; \
 	fi; \
     if [ 7 -eq 7 ]; then \
-        if [ 0 -eq 0 ]; then \
-            wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon*  && docker-php-ext-enable phalcon; \
-        fi; \
+        wget -O cphalcon.zip https://github.com/phalcon/cphalcon/archive/master.zip && unzip cphalcon.zip && cd cphalcon-master/build/php7/64bits && phpize && ./configure && make && make install && cd - && rm -fr cphalcon*  && docker-php-ext-enable phalcon; \
 	fi; \
     wget -O hiredis.zip https://github.com/redis/hiredis/archive/master.zip && unzip hiredis.zip && cd hiredis-master && make && make install && ldconfig && cd - && rm -fr hiredis* \
     && wget -O swoole.zip https://github.com/swoole/swoole-src/archive/v2.0.6.zip && unzip swoole.zip && cd swoole-src-2.0.6 && phpize \
