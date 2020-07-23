@@ -8,4 +8,5 @@ fi
 
 (useradd -m  -u 1000 -U -d  /home/developer developer &>/dev/null ;true)
 (usermod -G www-data developer &>/dev/null;true)
+(usermod -G developer www-data &>/dev/null;true)
 exec "$@"
